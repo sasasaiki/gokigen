@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	r := imageFileServer.CreateRoute(imageFileServer.NewProdHandler())
+	r := webServer.CreateRoute(webServer.NewProdHandler())
 	//cssやjsを読み込めるようにするHandler
 	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public/"))))
 

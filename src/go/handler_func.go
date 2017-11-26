@@ -1,4 +1,4 @@
-package imageFileServer
+package webServer
 
 import (
 	"io"
