@@ -1,4 +1,4 @@
-package: chat
+package: github.com/sasasaiki/web-templete-go-ts-pug-sass
 import:
-- package: github.com/gorilla/websocket
+- package: github.com/gorilla/mux
   version: ^1.2.0
