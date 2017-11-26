@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/sasasaiki/web-templete-go-ts-pug-sass/src/go"
+	"github.com/sasasaiki/gokigen/src/go"
 )
 
 func main() {

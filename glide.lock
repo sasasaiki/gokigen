@@ -1,5 +1,5 @@
-hash: d278461e1adca42a787145e3ed66abb95755b7d7f50cd1891a6ccb173fa914f8
-updated: 2017-11-26T17:57:43.027768027+09:00
+hash: 1ecb4dff614a34dba3d8e10ee1aa7083dd538ca393783dffaebf7034f679d9c6
+updated: 2017-11-26T19:08:17.788956566+09:00
 imports:
 - name: github.com/gorilla/context
   version: 08b5f424b9271eedf6f9f0ce86cb9396ed337a42
