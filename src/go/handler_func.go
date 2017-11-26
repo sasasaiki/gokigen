@@ -37,5 +37,6 @@ func outputError(w *http.ResponseWriter, e error, message string) {
 	log.Println(message, " エラーが発生しました:", e)
 }
 
+// 複数のエンドポイントで共有させたいオブジェクトとかもたせる
 type prodHandlerFunc struct {
 }
