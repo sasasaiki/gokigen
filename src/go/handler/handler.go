@@ -17,11 +17,6 @@ type MyHandler struct {
 	needLogin bool
 }
 
-//MyhandlerList 全てのHandlerを持つ。
-type MyhandlerList struct {
-	index http.Handler
-}
-
 //NewProdMyHandlerList prod用のHandlerリストを作る
 func NewProdMyHandlerList() *MyhandlerList {
 	return &MyhandlerList{
@@ -76,6 +71,8 @@ type logHandler struct {
 type needLoginHandler struct {
 	*decoratorHandler
 }
+
+//====新しいハンドラーは以下に追加===
 
 type templeteHandler struct {
 	once     sync.Once
