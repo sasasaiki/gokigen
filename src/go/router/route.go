@@ -19,7 +19,7 @@ func NewHandlerFuncs(h handler.HandlerFuncI) []MyHandlerFunc {
 		},
 		{
 			f:         h.Get,
-			path:      "/get/{name}/",
+			path:      "/get/{firstName}/{lastName}",
 			methods:   []string{"GET"},
 			needLogin: false,
 		},
@@ -43,7 +43,7 @@ func NewHandlers(hl *handler.MyhandlerList) []MyHandler {
 	return []MyHandler{
 		{
 			h:         hl.Index,
-			path:      "/index",
+			path:      "/",
 			methods:   []string{"GET"},
 			needLogin: false,
 		},

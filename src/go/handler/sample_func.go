@@ -1,27 +1,35 @@
 package handler
 
 import (
+	"encoding/json"
 	"io"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/sasasaiki/gokigen/src/go/usecase/sample"
 )
 
+//Add POSTのサンプル
 func (h *ProdHandlerFunc) Add(w http.ResponseWriter, r *http.Request) {
 }
 
+//Update PUTのサンプル
 func (h *ProdHandlerFunc) Update(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//Delete DELETEのサンプル
 func (h *ProdHandlerFunc) Delete(w http.ResponseWriter, r *http.Request) {
 
 }
 
+//Get GETのサンプル /get/firstName/lastName でfirstName+lastNameをjsonで返すだけ
 func (h *ProdHandlerFunc) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	log.Println(vars["name"])
+	name := sample.GetFullName(vars)
+	log.Println(name)
+	json.NewEncoder(w).Encode(name)
 }
 
 func outputError(w *http.ResponseWriter, e error, message string) {
