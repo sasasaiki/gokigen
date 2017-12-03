@@ -3,13 +3,10 @@ package main
 import (
 	"net/http"
 
-	"github.com/sasasaiki/gokigen/src/go"
+	"github.com/sasasaiki/gokigen/src/go/handler"
 )
 
 func main() {
-	r := gokigen.CreateRoute(gokigen.NewProdHandler())
-	//cssやjsを読み込めるようにするHandler
-	r.PathPrefix("/public/").Handler(http.StripPrefix("/public/", http.FileServer(http.Dir("public/"))))
-
+	r := gokigen.CreateRoute(gokigen.NewProdRoutingHandlers())
 	http.ListenAndServe(":8080", r)
 }
