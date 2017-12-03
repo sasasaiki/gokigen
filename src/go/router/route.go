@@ -1,47 +1,36 @@
-package gokigen
+package router
 
 import (
 	"net/http"
+
+	"github.com/sasasaiki/gokigen/src/go/handler"
 )
 
 //ルートの追加はこのファイルで行う
 
-//MyhandlerList 全てのHandlerを持つ。ハンドラーを増やす場合は追加
-type MyhandlerList struct {
-	index http.Handler
-}
-
-//HandlerFuncI ハンドリングすべき全てのfuncを持つ。ハンドリングするfuncを増やす場合は追加
-type HandlerFuncI interface {
-	add(w http.ResponseWriter, r *http.Request)
-	update(w http.ResponseWriter, r *http.Request)
-	delete(w http.ResponseWriter, r *http.Request)
-	get(w http.ResponseWriter, r *http.Request)
-}
-
 //NewHandlerFuncs funcの設定を配列としてもつ。新しくハンドリングするときはここに追加。
-func NewHandlerFuncs(h HandlerFuncI) []MyHandlerFunc {
+func NewHandlerFuncs(h handler.HandlerFuncI) []MyHandlerFunc {
 	return []MyHandlerFunc{
 		{
-			f:         h.add,
+			f:         h.Add,
 			path:      "/save",
 			methods:   []string{"POST"},
 			needLogin: true,
 		},
 		{
-			f:         h.get,
+			f:         h.Get,
 			path:      "/get/{name}/",
 			methods:   []string{"GET"},
 			needLogin: false,
 		},
 		{
-			f:         h.update,
+			f:         h.Update,
 			path:      "/update",
 			methods:   []string{"PUT"},
 			needLogin: true,
 		},
 		{
-			f:         h.delete,
+			f:         h.Delete,
 			path:      "/delete",
 			methods:   []string{"DELETE"},
 			needLogin: true,
@@ -50,13 +39,29 @@ func NewHandlerFuncs(h HandlerFuncI) []MyHandlerFunc {
 }
 
 //NewHandlers Handlerの設定を配列としてもつ。新しくハンドリングするときはここに追加。
-func NewHandlers(hl *MyhandlerList) []MyHandler {
+func NewHandlers(hl *handler.MyhandlerList) []MyHandler {
 	return []MyHandler{
 		{
-			h:         hl.index,
+			h:         hl.Index,
 			path:      "/index",
 			methods:   []string{"GET"},
 			needLogin: false,
 		},
 	}
+}
+
+//MyHandlerFunc ハンドリングするfuncとその情報を持つ
+type MyHandlerFunc struct {
+	f         func(w http.ResponseWriter, r *http.Request)
+	path      string
+	methods   []string
+	needLogin bool
+}
+
+//MyHandler Handlerとその設置
+type MyHandler struct {
+	h         http.Handler
+	path      string
+	methods   []string
+	needLogin bool
 }

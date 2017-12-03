@@ -1,4 +1,4 @@
-package gokigen
+package handler
 
 import (
 	"fmt"
@@ -9,43 +9,32 @@ import (
 	"sync"
 )
 
-//MyHandler Handlerとその設置
-type MyHandler struct {
-	h         http.Handler
-	path      string
-	methods   []string
-	needLogin bool
+//====新しいハンドラーは以下に追加===
+
+//MyhandlerList 全てのHandlerを持つ。ハンドラーを増やす場合は追加
+type MyhandlerList struct {
+	Index http.Handler
 }
 
 //NewProdMyHandlerList prod用のHandlerリストを作る
 func NewProdMyHandlerList() *MyhandlerList {
 	return &MyhandlerList{
-		index: &templeteHandler{fileName: "main/index.html"},
+		Index: &templeteHandler{FileName: "main/index.html"},
 	}
 }
 
-//NewLogHandler 処理の前にログを吐くようにする
-func NewLogHandler(h http.Handler) http.Handler {
-	lh := logHandler{&decoratorHandler{nextHandler: h}}
-	return &lh
-}
-
-//NewAuthHandler 処理の前にログインしているかチェックする
-func NewAuthHandler(h http.Handler) http.Handler {
-	nh := needLoginHandler{&decoratorHandler{nextHandler: h}}
-	return &nh
-}
+//========================================================
 
 func (t *templeteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	log.Println("indexにアクセス")
 	//一度だけテンプレートを読み込む
-	t.once.Do(func() {
-		t.templ =
+	t.Once.Do(func() {
+		t.Templ =
 			template.Must(template.ParseFiles(filepath.Join("views",
-				t.fileName)))
+				t.FileName)))
 	})
 
-	e := t.templ.Execute(w, nil)
+	e := t.Templ.Execute(w, nil)
 
 	if e != nil {
 		fmt.Println("テンプレートの読み込みに失敗しています")
@@ -62,6 +51,18 @@ func (nh needLoginHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	nh.nextHandler.ServeHTTP(w, r)
 }
 
+//NewLogHandler 処理の前にログを吐くようにする
+func NewLogHandler(h http.Handler) http.Handler {
+	lh := logHandler{&decoratorHandler{nextHandler: h}}
+	return &lh
+}
+
+//NewAuthHandler 処理の前にログインしているかチェックする
+func NewAuthHandler(h http.Handler) http.Handler {
+	nh := needLoginHandler{&decoratorHandler{nextHandler: h}}
+	return &nh
+}
+
 type decoratorHandler struct {
 	nextHandler http.Handler
 }
@@ -72,10 +73,9 @@ type needLoginHandler struct {
 	*decoratorHandler
 }
 
-//====新しいハンドラーは以下に追加===
-
+//templeteHandler htmlTempleteをを一度だけ読み込むハンドラー
 type templeteHandler struct {
-	once     sync.Once
-	fileName string
-	templ    *template.Template
+	Once     sync.Once
+	FileName string
+	Templ    *template.Template
 }

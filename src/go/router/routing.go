@@ -1,15 +1,16 @@
-package gokigen
+package router
 
 import (
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"github.com/sasasaiki/gokigen/src/go/handler"
 )
 
 //NewProdRoutingHandlers 本番用ハンドラーを作成
 func NewProdRoutingHandlers() (*[]MyHandlerFunc, *[]MyHandler) {
-	hf := NewHandlerFuncs(new(ProdHandlerFunc))
-	hs := NewHandlers(NewProdMyHandlerList())
+	hf := NewHandlerFuncs(new(handler.ProdHandlerFunc))
+	hs := NewHandlers(handler.NewProdMyHandlerList())
 	return &hf, &hs
 }
 
@@ -46,8 +47,8 @@ func setHandlersRoute(r *mux.Router, hs *[]MyHandler) {
 func setRoute(r *mux.Router, path string, h http.Handler, needLogin bool, methods ...string) {
 	result := h
 	if needLogin {
-		result = NewAuthHandler(result)
+		result = handler.NewAuthHandler(result)
 	}
-	result = NewLogHandler(result)
+	result = handler.NewLogHandler(result)
 	r.Handle(path, result).Methods(methods...)
 }

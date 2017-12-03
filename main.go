@@ -3,10 +3,10 @@ package main
 import (
 	"net/http"
 
-	"github.com/sasasaiki/gokigen/src/go/handler"
+	"github.com/sasasaiki/gokigen/src/go/router"
 )
 
 func main() {
-	r := gokigen.CreateRoute(gokigen.NewProdRoutingHandlers())
+	r := router.CreateRoute(router.NewProdRoutingHandlers())
 	http.ListenAndServe(":8080", r)
 }

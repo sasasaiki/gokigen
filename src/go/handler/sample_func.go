@@ -1,4 +1,4 @@
-package gokigen
+package handler
 
 import (
 	"io"
@@ -8,18 +8,18 @@ import (
 	"github.com/gorilla/mux"
 )
 
-func (h *ProdHandlerFunc) add(w http.ResponseWriter, r *http.Request) {
+func (h *ProdHandlerFunc) Add(w http.ResponseWriter, r *http.Request) {
 }
 
-func (h *ProdHandlerFunc) update(w http.ResponseWriter, r *http.Request) {
-
-}
-
-func (h *ProdHandlerFunc) delete(w http.ResponseWriter, r *http.Request) {
+func (h *ProdHandlerFunc) Update(w http.ResponseWriter, r *http.Request) {
 
 }
 
-func (h *ProdHandlerFunc) get(w http.ResponseWriter, r *http.Request) {
+func (h *ProdHandlerFunc) Delete(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func (h *ProdHandlerFunc) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	log.Println(vars["name"])
 }
