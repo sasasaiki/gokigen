@@ -8,14 +8,14 @@ import (
 )
 
 //NewProdRoutingHandlers 本番用ハンドラーを作成
-func NewProdRoutingHandlers() (*[]MyHandlerFunc, *[]MyHandler) {
-	hf := NewHandlerFuncs(new(handler.ProdHandlerFunc))
-	hs := NewHandlers(handler.NewProdMyHandlerList())
+func NewProdRoutingHandlers() (*[]handler.HandlingFunc, *[]handler.Handler) {
+	hf := handler.NewHandlingFuncs(new(handler.ProdHandlingFunc))
+	hs := handler.NewHandlers(handler.NewProdMyHandlerList())
 	return &hf, &hs
 }
 
 //CreateRoute 渡されたhandlerとfuncについてrouteを設定する
-func CreateRoute(hf *[]MyHandlerFunc, hs *[]MyHandler) *mux.Router {
+func CreateRoute(hf *[]handler.HandlingFunc, hs *[]handler.Handler) *mux.Router {
 	r := mux.NewRouter()
 
 	//cssやjsを読み込めるようにするHandler
@@ -29,26 +29,26 @@ func CreateRoute(hf *[]MyHandlerFunc, hs *[]MyHandler) *mux.Router {
 }
 
 //Handlerが必要ないrouteの設定
-func setFuncsRoute(r *mux.Router, hf *[]MyHandlerFunc) {
+func setFuncsRoute(r *mux.Router, hf *[]handler.HandlingFunc) {
 	for _, h := range *hf {
-		setRoute(r, h.path, http.HandlerFunc(h.f), h.needLogin, h.methods...)
+		setRoute(r, http.HandlerFunc(h.Function), h.Conf)
 	}
 }
 
 //Handlerが必要なrouteの設定
 //templete読み込みなど
-func setHandlersRoute(r *mux.Router, hs *[]MyHandler) {
+func setHandlersRoute(r *mux.Router, hs *[]handler.Handler) {
 	for _, h := range *hs {
-		setRoute(r, h.path, h.h, h.needLogin, h.methods...)
+		setRoute(r, h.Handler, h.Conf)
 	}
 }
 
 //新しくHandlerをデコレーションする必要がある場合はここでやる
-func setRoute(r *mux.Router, path string, h http.Handler, needLogin bool, methods ...string) {
+func setRoute(r *mux.Router, h http.Handler, conf *handler.HandlingConf) {
 	result := h
-	if needLogin {
+	if conf.NeedLogin {
 		result = handler.NewAuthHandler(result)
 	}
 	result = handler.NewLogHandler(result)
-	r.Handle(path, result).Methods(methods...)
+	r.Handle(conf.Path, result).Methods(conf.Methods...)
 }

@@ -11,21 +11,21 @@ import (
 )
 
 //Add POSTのサンプル
-func (h *ProdHandlerFunc) Add(w http.ResponseWriter, r *http.Request) {
+func (h *ProdHandlingFunc) Add(w http.ResponseWriter, r *http.Request) {
 }
 
 //Update PUTのサンプル
-func (h *ProdHandlerFunc) Update(w http.ResponseWriter, r *http.Request) {
+func (h *ProdHandlingFunc) Update(w http.ResponseWriter, r *http.Request) {
 
 }
 
 //Delete DELETEのサンプル
-func (h *ProdHandlerFunc) Delete(w http.ResponseWriter, r *http.Request) {
+func (h *ProdHandlingFunc) Delete(w http.ResponseWriter, r *http.Request) {
 
 }
 
 //Get GETのサンプル /get/firstName/lastName でfirstName+lastNameをjsonで返すだけ
-func (h *ProdHandlerFunc) Get(w http.ResponseWriter, r *http.Request) {
+func (h *ProdHandlingFunc) Get(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	name := sample.GetFullName(vars)
 	log.Println(name)

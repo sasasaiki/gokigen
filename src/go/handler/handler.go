@@ -11,16 +11,43 @@ import (
 
 //====新しいハンドラーは以下に追加===
 
-//MyhandlerList 全てのHandlerを持つ。ハンドラーを増やす場合は追加
-type MyhandlerList struct {
+//Handlers 全てのHandlerを持つ。ハンドラーを増やす場合は追加
+type Handlers struct {
 	Index http.Handler
 }
 
+//NewHandlers Handlerの設定を配列としてもつ。新しくハンドリングするときはここに追加。
+func NewHandlers(hl *Handlers) []Handler {
+	return []Handler{
+		{
+			Handler: hl.Index,
+			Conf: &HandlingConf{
+				Path:      "/",
+				Methods:   []string{"GET"},
+				NeedLogin: false,
+			},
+		},
+	}
+}
+
 //NewProdMyHandlerList prod用のHandlerリストを作る
-func NewProdMyHandlerList() *MyhandlerList {
-	return &MyhandlerList{
+func NewProdMyHandlerList() *Handlers {
+	return &Handlers{
 		Index: &templeteHandler{FileName: "main/index.html"},
 	}
+}
+
+//Handler Handlerとその設定
+type Handler struct {
+	Handler http.Handler
+	Conf    *HandlingConf
+}
+
+//HandlingConf handlerの設定
+type HandlingConf struct {
+	Path      string
+	Methods   []string
+	NeedLogin bool
 }
 
 //========================================================
