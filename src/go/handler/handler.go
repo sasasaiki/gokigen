@@ -33,7 +33,7 @@ func NewHandlers(hl *Handlers) []Handler {
 //NewProdMyHandlerList prod用のHandlerリストを作る
 func NewProdMyHandlerList() *Handlers {
 	return &Handlers{
-		Index: &templeteHandler{Template: &Template{FileName: "main/index.html"}},
+		Index: &templateHandler{Template: &Template{FileName: "main/index.html"}},
 	}
 }
 
@@ -52,7 +52,7 @@ type HandlingConf struct {
 
 //========================================================
 
-func (t *templeteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	execTemplate(w, t.Template, nil)
 }
 
@@ -110,9 +110,9 @@ type Template struct {
 	Templ    *template.Template
 }
 
-//templeteHandler htmlTemplateを一度だけ読み込むハンドラー
+//templateHandler htmlTemplateを一度だけ読み込むハンドラー
 //goのテンプレートに値を渡したいときはこいつを埋め込んで値のstructも持たせ
 //ServeHTTPを実装する
-type templeteHandler struct {
+type templateHandler struct {
 	*Template
 }
