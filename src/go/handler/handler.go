@@ -33,7 +33,7 @@ func NewHandlers(hl *Handlers) []Handler {
 //NewProdMyHandlerList prod用のHandlerリストを作る
 func NewProdMyHandlerList() *Handlers {
 	return &Handlers{
-		Index: &templeteHandler{FileName: "main/index.html"},
+		Index: &templeteHandler{Template: &Template{FileName: "main/index.html"}},
 	}
 }
 
@@ -53,19 +53,22 @@ type HandlingConf struct {
 //========================================================
 
 func (t *templeteHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	log.Println("indexにアクセス")
-	//一度だけテンプレートを読み込む
+	execTemplate(w, t.Template, nil)
+}
+
+func execTemplate(w http.ResponseWriter, t *Template, param interface{}) {
+	log.Println(t.FileName + "にアクセス")
 	t.Once.Do(func() {
 		t.Templ =
 			template.Must(template.ParseFiles(filepath.Join("views",
 				t.FileName)))
 	})
-
-	e := t.Templ.Execute(w, nil)
+	e := t.Templ.Execute(w, param)
 
 	if e != nil {
 		fmt.Println("テンプレートの読み込みに失敗しています")
 	}
+
 }
 
 func (lh logHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -100,9 +103,16 @@ type needLoginHandler struct {
 	*decoratorHandler
 }
 
-//templeteHandler htmlTempleteをを一度だけ読み込むハンドラー
-type templeteHandler struct {
+//Template templateHandlerに持たせる
+type Template struct {
 	Once     sync.Once
 	FileName string
 	Templ    *template.Template
+}
+
+//templeteHandler htmlTemplateを一度だけ読み込むハンドラー
+//goのテンプレートに値を渡したいときはこいつを埋め込んで値のstructも持たせ
+//ServeHTTPを実装する
+type templeteHandler struct {
+	*Template
 }
